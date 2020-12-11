@@ -11,11 +11,14 @@ import UIKit
 class MainViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UISearchBarDelegate {
   
   // MARK: - Instance Properties
-  fileprivate var userInfos = [UserInfo]()
+  fileprivate var userItems = [UserInfo]()
   fileprivate let cellId = "CellId"
   fileprivate let searchController = UISearchController(searchResultsController: nil)
+
+  fileprivate var timer: Timer?
+  fileprivate var searchStr: String?
   
-  var timer: Timer?
+  fileprivate var activityIndicatorView = UIActivityIndicatorView()
   
   // MARK: - View Life Cycle
   override func viewDidLoad() {
@@ -47,14 +50,42 @@ class MainViewController: UICollectionViewController, UICollectionViewDelegateFl
     searchController.searchBar.delegate = self
   }
   
+  func fetchData(searchTerm: String, page: Int) {
+    
+  }
+  
+  fileprivate func loadUserInfos(searchTerm: String) {
+    let page = userItems.count / 100 + 1
+    
+    Service.shared.fetchSearchData(searchTerm: searchTerm, page: page) { (userInfos, error) in
+      
+      if let error = error {
+        print("Failed to fetch apps:", error)
+        return
+      }
+          
+      if let newItems = userInfos {
+        self.userItems += newItems
+      }
+      
+      DispatchQueue.main.async {
+        self.collectionView.performBatchUpdates(nil, completion: nil)
+      }
+    }
+  }
+  
   // MARK: - UICollectionViewDataSource Methods
   override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return userInfos.count
+    return userItems.count
   }
   
   override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! SearchResultCell
-    cell.userInfo = userInfos[indexPath.item]
+    cell.userInfo = userItems[indexPath.item]
+    
+    if indexPath.row == userItems.count - 1 {
+      loadUserInfos(searchTerm: searchStr ?? "")
+    }
     return cell
   }
   
@@ -62,24 +93,21 @@ class MainViewController: UICollectionViewController, UICollectionViewDelegateFl
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
     return .init(width: view.frame.width, height: 100)
   }
-  
+      
   // MARK: - UISearchBarDelegate
   func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
     
+    searchStr = searchText
+    
     timer?.invalidate()
-    timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { _ in
-      Service.shared.fetchSearchData(searchTerm: searchText, page: 1) { (userInfos, error) in
-        if let error = error {
-          print("Failed to fetch apps:", error)
-          return
-        }
-        
-        self.userInfos = userInfos ?? []
-        
-        DispatchQueue.main.async {
-          self.collectionView.reloadData()
-        }
+    timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { [weak self] _ in
+      guard let self = self else { return }
+      
+      DispatchQueue.main.async {
+        self.userItems.removeAll()
+        self.collectionView.reloadData()
+        self.loadUserInfos(searchTerm: self.searchStr ?? "")
       }
-    })        
+    })
   }
 }
