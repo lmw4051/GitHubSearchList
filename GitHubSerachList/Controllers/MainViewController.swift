@@ -14,7 +14,7 @@ class MainViewController: UICollectionViewController, UICollectionViewDelegateFl
   fileprivate var userItems = [UserInfo]()
   fileprivate let cellId = "CellId"
   fileprivate let searchController = UISearchController(searchResultsController: nil)
-
+  
   fileprivate var timer: Timer?
   fileprivate var searchStr: String?
   
@@ -50,10 +50,6 @@ class MainViewController: UICollectionViewController, UICollectionViewDelegateFl
     searchController.searchBar.delegate = self
   }
   
-  func fetchData(searchTerm: String, page: Int) {
-    
-  }
-  
   fileprivate func loadUserInfos(searchTerm: String) {
     let page = userItems.count / 100 + 1
     
@@ -63,7 +59,7 @@ class MainViewController: UICollectionViewController, UICollectionViewDelegateFl
         print("Failed to fetch apps:", error)
         return
       }
-          
+      
       if let newItems = userInfos {
         self.userItems += newItems
       }
@@ -93,7 +89,7 @@ class MainViewController: UICollectionViewController, UICollectionViewDelegateFl
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
     return .init(width: view.frame.width, height: 100)
   }
-      
+  
   // MARK: - UISearchBarDelegate
   func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
     

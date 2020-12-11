@@ -19,7 +19,7 @@ class Service {
       if let error = error {
         print("Failed to fetch apps:", error)
         return
-      }
+      }            
       
       guard let data = data else { return }
       
