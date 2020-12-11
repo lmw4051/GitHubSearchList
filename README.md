@@ -12,3 +12,5 @@ Design Pattern: MVC
 Databaser: Realm
 
 Dont't forget to call pod install after cloning!
+
+![image](https://i.imgur.com/dy3BIin.png)
