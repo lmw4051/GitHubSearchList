@@ -69,6 +69,6 @@ class MainViewController: UICollectionViewController, UICollectionViewDelegateFl
   
   // MARK: -  UICollectionViewDelegateFlowLayout Methods
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-    return .init(width: view.frame.width, height: 150)
+    return .init(width: view.frame.width, height: 100)
   }
 }
