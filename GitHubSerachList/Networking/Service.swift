@@ -11,8 +11,8 @@ import Foundation
 class Service {
   static let shared = Service()
   
-  func fetchSearchData(completion: @escaping ([UserInfo], Error?) -> ()) {
-    let urlString = "https://api.github.com/search/users?q=a&page=1"
+  func fetchSearchData(searchTerm: String, page: Int, completion: @escaping ([UserInfo]?, Error?) -> ()) {
+    let urlString = "https://api.github.com/search/users?q=\(searchTerm)&page=\(page)"
     guard let url = URL(string: urlString) else { return }
     
     URLSession.shared.dataTask(with: url) { (data, response, error) in

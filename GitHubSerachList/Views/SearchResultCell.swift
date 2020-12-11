@@ -58,8 +58,8 @@ class SearchResultCell: UICollectionViewCell {
     
     let stackView = containerView.hStack(
       profileImageView,
-      containerView.vStack(loginLabel, scoreLabel, spacing: 2, alignment: .leading),
-      spacing: 12, alignment: .center)
+      containerView.vStack(loginLabel, scoreLabel, spacing: 8, alignment: .leading),
+      spacing: 16, alignment: .center)
     
     stackView.layoutMargins = .init(top: 0, left: 16, bottom: 0, right: 32)
     stackView.isLayoutMarginsRelativeArrangement = true
