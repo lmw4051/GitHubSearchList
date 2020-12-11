@@ -9,21 +9,21 @@
 /* Begin PBXBuildFile section */
 		542DA411258358B000E033E1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DA410258358B000E033E1 /* AppDelegate.swift */; };
 		542DA413258358B000E033E1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DA412258358B000E033E1 /* SceneDelegate.swift */; };
-		542DA415258358B000E033E1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DA414258358B000E033E1 /* ViewController.swift */; };
 		542DA418258358B000E033E1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 542DA416258358B000E033E1 /* Main.storyboard */; };
 		542DA41A258358B100E033E1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 542DA419258358B100E033E1 /* Assets.xcassets */; };
 		542DA41D258358B100E033E1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 542DA41B258358B100E033E1 /* LaunchScreen.storyboard */; };
+		542DA4262583591600E033E1 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542DA4252583591600E033E1 /* MainViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		542DA40D258358B000E033E1 /* GitHubSerachList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GitHubSerachList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		542DA410258358B000E033E1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		542DA412258358B000E033E1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		542DA414258358B000E033E1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		542DA417258358B000E033E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		542DA419258358B100E033E1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		542DA41C258358B100E033E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		542DA41E258358B100E033E1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		542DA4252583591600E033E1 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,15 +56,23 @@
 		542DA40F258358B000E033E1 /* GitHubSerachList */ = {
 			isa = PBXGroup;
 			children = (
+				542DA4242583590B00E033E1 /* Controllers */,
 				542DA410258358B000E033E1 /* AppDelegate.swift */,
 				542DA412258358B000E033E1 /* SceneDelegate.swift */,
-				542DA414258358B000E033E1 /* ViewController.swift */,
 				542DA416258358B000E033E1 /* Main.storyboard */,
 				542DA419258358B100E033E1 /* Assets.xcassets */,
 				542DA41B258358B100E033E1 /* LaunchScreen.storyboard */,
 				542DA41E258358B100E033E1 /* Info.plist */,
 			);
 			path = GitHubSerachList;
+			sourceTree = "<group>";
+		};
+		542DA4242583590B00E033E1 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				542DA4252583591600E033E1 /* MainViewController.swift */,
+			);
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -138,7 +146,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				542DA415258358B000E033E1 /* ViewController.swift in Sources */,
+				542DA4262583591600E033E1 /* MainViewController.swift in Sources */,
 				542DA411258358B000E033E1 /* AppDelegate.swift in Sources */,
 				542DA413258358B000E033E1 /* SceneDelegate.swift in Sources */,
 			);
@@ -285,7 +293,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 36872U436D;
+				DEVELOPMENT_TEAM = RNX3GY6LZ6;
 				INFOPLIST_FILE = GitHubSerachList/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -303,7 +311,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 36872U436D;
+				DEVELOPMENT_TEAM = RNX3GY6LZ6;
 				INFOPLIST_FILE = GitHubSerachList/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
