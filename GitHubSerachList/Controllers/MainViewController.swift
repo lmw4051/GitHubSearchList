@@ -11,7 +11,11 @@ import UIKit
 class MainViewController: UICollectionViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
-    collectionView.backgroundColor = .red
+    collectionView.backgroundColor = .white
+    
+    Service.shared.fetchSearchData { (userInfos, error) in
+      print(userInfos)
+    }
   }
   
   init() {
