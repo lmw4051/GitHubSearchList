@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 class MainViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UISearchBarDelegate {
   
@@ -19,6 +20,12 @@ class MainViewController: UICollectionViewController, UICollectionViewDelegateFl
   fileprivate var searchStr: String?
   
   fileprivate var activityIndicatorView = UIActivityIndicatorView()
+  
+  fileprivate var nextPage = 1
+  
+  fileprivate var isSearching = false
+  
+//  fileprivate var lastPage = 0
   
   // MARK: - View Life Cycle
   override func viewDidLoad() {
@@ -51,21 +58,57 @@ class MainViewController: UICollectionViewController, UICollectionViewDelegateFl
   }
   
   fileprivate func loadUserInfos(searchTerm: String) {
-    let page = userItems.count / 100 + 1
+    MBProgressHUD.showAdded(to: self.view, animated: true)
     
-    Service.shared.fetchSearchData(searchTerm: searchTerm, page: page) { (userInfos, error) in
+    Service.shared.fetchSearchData(searchTerm: searchTerm, page: nextPage) { [weak self] (userInfos, response, error) in
+      guard let self = self else { return }
+      
+      DispatchQueue.main.async {
+        MBProgressHUD.hide(for: self.view, animated: true)
+      }
       
       if let error = error {
         print("Failed to fetch apps:", error)
         return
       }
       
-      if let newItems = userInfos {
-        self.userItems += newItems
+      if self.isSearching {
+        self.userItems = userInfos ?? []
+      } else {
+        if let newItems = userInfos {
+          self.userItems += newItems
+        }
       }
-      
+                  
       DispatchQueue.main.async {
         self.collectionView.performBatchUpdates(nil, completion: nil)
+      }
+      
+      self.parseHeader(response: response as? HTTPURLResponse)
+    }
+  }
+  
+  func parseHeader(response: HTTPURLResponse?) {
+    if let httpResponse = response {
+      if let linkHeader = httpResponse.allHeaderFields["Link"] as? String {
+        print("linkHeader:", linkHeader)
+        
+        let links = linkHeader.components(separatedBy: ",")
+        
+        var dictionary: [String: String] = [:]
+        links.forEach {
+          let components = $0.components(separatedBy:"; ")
+          let cleanPath = components[0].trimmingCharacters(in: CharacterSet(charactersIn: "<>"))
+          dictionary[components[1]] = cleanPath
+        }
+        
+        if let nextPagePath = dictionary["rel=\"next\""] {
+          print("nextPagePath: \(nextPagePath)")
+          if let nextPage = nextPagePath.components(separatedBy: "=").last {
+            print(nextPage)
+            self.nextPage = Int(nextPage) ?? 0
+          }
+        }
       }
     }
   }
@@ -79,31 +122,42 @@ class MainViewController: UICollectionViewController, UICollectionViewDelegateFl
     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! SearchResultCell
     cell.userInfo = userItems[indexPath.item]
     
-    if indexPath.row == userItems.count - 1 {
-      loadUserInfos(searchTerm: searchStr ?? "")
+    if indexPath.item == userItems.count - 1 {
+      if !isSearching {
+        loadUserInfos(searchTerm: searchStr ?? "")
+      }
     }
+    
     return cell
   }
-  
+    
   // MARK: -  UICollectionViewDelegateFlowLayout Methods
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
     return .init(width: view.frame.width, height: 100)
   }
   
-  // MARK: - UISearchBarDelegate
+  // MARK: - UISearchBarDelegate Methods
   func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    isSearching = true
     
     searchStr = searchText
+    self.userItems.removeAll()
     
     timer?.invalidate()
-    timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { [weak self] _ in
+    timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: false, block: { [weak self] _ in
       guard let self = self else { return }
       
-      DispatchQueue.main.async {
-        self.userItems.removeAll()
-        self.collectionView.reloadData()
-        self.loadUserInfos(searchTerm: self.searchStr ?? "")
-      }
+      self.loadUserInfos(searchTerm: self.searchStr ?? "")
     })
+  }
+  
+  func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+    print("searchBarTextDidEndEditing")
+    isSearching = false
+  }
+  
+  func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+    print("searchBarTextDidBeginEditing")
+    isSearching = true
   }
 }

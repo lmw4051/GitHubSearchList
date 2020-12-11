@@ -7,5 +7,5 @@ target 'GitHubSerachList' do
 
   # Pods for GitHubSerachList
   pod 'SDWebImage'
-  
+  pod 'MBProgressHUD', '~> 1.2.0'
 end
